@@ -16,7 +16,15 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+# from .views import *
+from .views import helloworld,helloworld_json,random_number
 
 urlpatterns = [
+    # http://127.0.0.1:8000/hello/
+    path("hello/",helloworld),
+    # http://127.0.0.1:8000/hello/json/
+    path("hello/json/",helloworld_json),
+    # http://127.0.0.1:8000/random/
+    path("random/",random_number),
     path('admin/', admin.site.urls),
 ]
