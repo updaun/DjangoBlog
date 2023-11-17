@@ -60,7 +60,8 @@ ROOT_URLCONF = 'config.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        # OS 별로 경로가 살짝 다르기 때문에, \ 로 경로 정하지 말고, os.path.join()을 사용해야 범용성 좋은 코드다.
+        'DIRS': [ os.path.join(BASE_DIR,"templates") ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
