@@ -1,10 +1,14 @@
 from django.urls import path, include
 from .views import blog_list,BlogListView,BlogDetailView
+from .apis import *
 
 # 기본 라우팅 자체가 blog부터 시작
 # http://127.0.0.1:8000/blog/
 # 라우팅은 urlpatterns 에 작성된 순서대로 찾아나간다.
 urlpatterns = [
+    # http://127.0.0.1:8000/blog/api/hello/
+    path("api/hello/",HelloWorldAPI.as_view()),
+
     # http://127.0.0.1:8000/blog/list/
     path("list/",blog_list),
 
