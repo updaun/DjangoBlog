@@ -25,7 +25,7 @@ class HelloWorldAPI(APIView):
     
 
 class BlogAPI(APIView):
-    
+
     def get(self, request):
         blog_list = Blog.objects.all()
         serializer = BlogSerializer(blog_list, many=True)
@@ -38,3 +38,24 @@ class BlogAPI(APIView):
         serializer = BlogSerializer(blog)
         return Response(status=status.HTTP_201_CREATED, data={"blog": serializer.data})
         
+
+class BlogDetailAPI(APIView):
+
+    def get_object(self, pk):
+        try:
+            blog = Blog.objects.get(pk=pk)
+        except Blog.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND, data={"message": "DoesNotExist"})
+        return blog
+
+    def get(self, request, pk):
+        blog = self.get_object(pk)
+        serializer = BlogSerializer(blog, many=False)
+        return Response(status=status.HTTP_200_OK, data={"blog": serializer.data})
+    
+    def put(self, request, pk):
+        blog = self.get_object(pk)
+        serializer = BlogSerializer(blog , data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(status=status.HTTP_200_OK, data={"message": "change blog", "data": serializer.data})
