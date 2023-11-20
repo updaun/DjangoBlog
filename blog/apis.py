@@ -25,8 +25,16 @@ class HelloWorldAPI(APIView):
     
 
 class BlogAPI(APIView):
+    
     def get(self, request):
         blog_list = Blog.objects.all()
         serializer = BlogSerializer(blog_list, many=True)
         return Response(data={"blog_list": serializer.data})
+
+    def post(self, request):
+        serializer = BlogSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        blog = serializer.save()
+        serializer = BlogSerializer(blog)
+        return Response(status=status.HTTP_201_CREATED, data={"blog": serializer.data})
         
