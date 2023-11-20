@@ -1,6 +1,7 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework import exceptions
 
 from .models import Blog
 from .serializers import BlogSerializer
@@ -45,7 +46,7 @@ class BlogDetailAPI(APIView):
         try:
             blog = Blog.objects.get(pk=pk)
         except Blog.DoesNotExist:
-            return Response(status=status.HTTP_404_NOT_FOUND, data={"message": "DoesNotExist"})
+            raise exceptions.NotFound(detail = "not found") 
         return blog
 
     def get(self, request, pk):
