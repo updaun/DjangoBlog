@@ -41,7 +41,7 @@ class BlogAPI(APIView):
 
 class BlogDetailAPI(APIView):
 
-    def get_object(self, pk):
+    def get_object(self, pk):        
         try:
             blog = Blog.objects.get(pk=pk)
         except Blog.DoesNotExist:
@@ -56,6 +56,14 @@ class BlogDetailAPI(APIView):
     def put(self, request, pk):
         blog = self.get_object(pk)
         serializer = BlogSerializer(blog , data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(status=status.HTTP_200_OK, data={"message": "change blog", "data": serializer.data})
+    
+    # https://cdrf.co
+    def patch(self, request, pk):
+        blog = self.get_object(pk)
+        serializer = BlogSerializer(blog , data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(status=status.HTTP_200_OK, data={"message": "change blog", "data": serializer.data})
