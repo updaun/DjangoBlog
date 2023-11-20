@@ -16,3 +16,8 @@ class BlogListView(View):
         random_number = random.randint(1, 10000)
         blog_list = Blog.objects.all() # queryset (list) of Blog objects
         return render(request, "blog_list.html", {"number": random_number, "blogs": blog_list})
+
+class BlogDetailView(View):
+    def get(self, request, blogid):
+        blog = Blog.objects.get(id=blogid) 
+        return render(request, "blog_list.html", {"blogs": [blog]})

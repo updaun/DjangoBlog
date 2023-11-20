@@ -26,6 +26,8 @@ urlpatterns = [
     path("random/", random_number),
     # http://127.0.0.1:8000/blog/
     path("blog/", include("blog.urls")),
+    # http://127.0.0.1:8000/api/blog/
+    path("api/blog/", include("blog.api_urls")),
     # http://127.0.0.1:8000/admin/
     path('admin/', admin.site.urls),
 ]
