@@ -67,3 +67,8 @@ class BlogDetailAPI(APIView):
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(status=status.HTTP_200_OK, data={"message": "change blog", "data": serializer.data})
+    
+    def delete(self, request, pk):
+        blog = self.get_object(pk)
+        blog.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
