@@ -17,10 +17,13 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 # from .views import *
-from .views import helloworld,helloworld_json,random_number
+from .views import helloworld,helloworld_json,random_number,HomeView
 from blog import api_urls
 
 urlpatterns = [
+    # http://127.0.0.1:8000/
+    path("",HomeView.as_view()),
+
     # http://127.0.0.1:8000/hello/
     path("hello/",helloworld),
     # http://127.0.0.1:8000/hello/json/

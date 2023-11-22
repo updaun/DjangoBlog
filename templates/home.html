@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% comment %} base.html을 확장해서 사용한다는 의미 {% endcomment %}
+{% comment %} 혹시 home.html에서 comment(주석)이 맨 위에 나오면 안되는 이유가 뭔가요? {% endcomment %}
+
+
+{% comment %} base.html 에서 content 블록을 그대로 가져와서 이 사이에 내용을 넣어준다. {% endcomment %}
+{% block content %}
+
+<h1>홈입니다</h1>
+
+<div class="grid-container" id="blogGrid">
+</div>
+
+<script>
+    axios.get('/api/blog/')
+    .then(function (response){
+        /*
+        console.log(response.data.blog_list)
+        
+        let blog_list = response.data.blog_list
+
+        Jquery 방식이 아닌 순수 JS 문법으로 가져와보자
+        let blog_container = document.querySelector('.blog-container')
+        blog_container.innerHTML = blog_list
+        */
+        
+        const blogGrid = document.getElementById('blogGrid')
+
+        
+        response.data.blog_list.forEach(blog => {
+            console.log(blog)
+            const blogCard = document.createElement('div')
+            blogCard.classList.add('blog-card')
+            blogCard.innerHTML = `${blog.title}`
+            blogGrid.appendChild(blogCard)
+        })
+        
+    })
+</script>
+
+{% endblock %}
+
+
+{% comment %} 이 구조가 기초 틀이다 {% endcomment %}
+
+

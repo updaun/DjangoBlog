@@ -123,7 +123,17 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-STATIC_URL = 'static/'
+# static 경로 설정 - 폴더 이름이 static(관념)
+STATIC_URL = '/static/'
+# static 루트 설정
+
+# 배포단계에서는 STATIC_ROOT를 통해서 모든 static파일들을 몰아준다.
+# STATIC_ROOT = os.path.join(BASE_DIR,"staticfiles")
+# # python manage.py collectstatic
+
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "static"),
+]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field

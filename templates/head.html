@@ -1,0 +1,19 @@
+{% load static %}
+
+<head>
+    <!-- title -->
+    <title>DjangoBlog</title>
+
+    <!-- Jquery -->
+    {% comment %} ```
+    content delivery network : 빠르게 static 코드를 가져오는 것 {% endcomment %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+
+    <!-- Axios -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+    <!-- CSS -->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+
+</head>
