@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+
+<h1>홈입니다.</h1>
+
+<div class="grid-container" id="blogGrid"></div>
+
+
+<script>
+    axios.get('/api/blog/')
+    .then(function (response){
+        const blogGrid = document.getElementById('blogGrid')
+
+        
+        response.data.blog_list.forEach(blog => {
+            console.log(blog)
+            const blogCard = document.createElement('div')
+            blogCard.classList.add('blog-card')
+            blogCard.innerHTML = `${blog.title}`
+            blogGrid.appendChild(blogCard)
+        })
+    })
+</script>
+
+
+{% endblock %}
