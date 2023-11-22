@@ -18,6 +18,7 @@ from django.urls import path, include
 from .views import *
 
 urlpatterns = [
+    path("", HomeView.as_view()),
     # http://127.0.0.1:8000/hello/
     path("hello/", helloworld),
     # http://127.0.0.1:8000/hello/json/
