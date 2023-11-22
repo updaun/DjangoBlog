@@ -18,6 +18,8 @@ from django.urls import include, path
 from .views import *
 
 urlpatterns = [
+    path("", HomeView.as_view()),
+
     path('hello/', helloworld),
     path('hello/json/', helloworld_json),
     path('random/', random_number),
