@@ -1,6 +1,6 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import status
+from rest_framework import status, generics, viewsets
 from .models import Blog
 from .serializers import BlogSerializer
 from rest_framework import exceptions
@@ -41,6 +41,11 @@ class BlogAPI(APIView):
         return Response(status=status.HTTP_201_CREATED, data={"blog":serializer.data})
 
 
+class BlogGenericAPI(generics.ListCreateAPIView):
+    queryset = Blog.objects.all()
+    serializer_class = BlogSerializer
+
+
 class BlogDetailAPI(APIView):
 
     def get_object(self, pk):
@@ -73,3 +78,13 @@ class BlogDetailAPI(APIView):
         blog = self.get_object(pk)
         blog.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+    
+
+class BlogGenericDetailAPI(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Blog.objects.all()
+    serializer_class = BlogSerializer
+
+
+class BlogViewSet(viewsets.ModelViewSet):
+    queryset = Blog.objects.all()
+    serializer_class = BlogSerializer
