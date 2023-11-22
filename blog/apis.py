@@ -47,6 +47,10 @@ class BlogAPI(APIView):
         serializer.is_valid(raise_exception=True)
         # True라면 진행
         blog = serializer.save()
+
+        # user의 point가 차감되도록 코딩하면 
+        # user.point -= 100
+        # blog.save() 해줘야 한다.
         serializer = BlogSerializer(blog)
         return Response(status=status.HTTP_201_CREATED, data={"blog":serializer.data})
 
