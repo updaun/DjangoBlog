@@ -1,6 +1,6 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import status
+from rest_framework import status, generics, viewsets
 from .models import Blog
 from .serializers import BlogSerializer
 from rest_framework import exceptions
@@ -49,7 +49,15 @@ class BlogAPI(APIView):
         blog = serializer.save()
         serializer = BlogSerializer(blog)
         return Response(status=status.HTTP_201_CREATED, data={"blog":serializer.data})
-        
+
+# generics API를 사용하면 위의 클래스 기능과 동일하다!
+# ListAPIView 와 CreateAPIView 둘 다 포함하는 ListCreateAPIView
+class BlogGenericAPI(generics.ListCreateAPIView):
+    
+    queryset = Blog.objects.all()
+    serializer_class = BlogSerializer
+
+
 
 # 상세 조회
 class BlogDetailAPI(APIView):
@@ -112,3 +120,18 @@ class BlogDetailAPI(APIView):
         blog = self.get_object(pk)
         blog.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+# Retrieve는 상세조회만
+# UpdateAPIView는 업데이트만
+# DestroyAPIView는 Delete 기능을 하는 API
+
+# 이 세가지를 다 하는 APIVIew가 바로 RetrieveUpdateDestroyAPIView 이다.
+class BlogGenericDetailAPI(generics.RetrieveUpdateDestroyAPIView):
+    # 필요할 때는 .filter()를 사용해서 범위를 좁혀낼 수 있다. 일단은 all() 을 해주자.
+    queryset = Blog.objects.all()
+    serializer_class = BlogSerializer
+
+# ListCreateAPIView 와 RetrieveUpdateDestroyAPIView 를 다 합치는 ViewSets
+class BlogViewSet(viewsets.ModelViewSet):
+    queryset = Blog.objects.all()
+    serializer_class = BlogSerializer
