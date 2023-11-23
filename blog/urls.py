@@ -8,4 +8,6 @@ urlpatterns = [
     path("list2/", BlogListView.as_view()),
     # http://127.0.0.1:8000/blog/3/
     path("<int:blogid>/", BlogDetailView.as_view()),
+    path("create/", BlogCreateView.as_view()),
+    path("update/<int:pk>/", BlogUpdateView.as_view()),
 ]
