@@ -149,13 +149,18 @@ class BlogGenericDetailAPI(generics.RetrieveUpdateDestroyAPIView):
 
 # ListCreateAPIView 와 RetrieveUpdateDestroyAPIView 를 다 합치는 ViewSets
 class BlogViewSet(viewsets.ModelViewSet):
-    queryset = Blog.objects.all()
+    queryset = Blog.objects.all().order_by('-created_at')   # -를 붙였으니까 최신순으로 정렬
     serializer_class = BlogSerializer
     # # 인증
     # authentication_classes = ()
     # 인가
     permission_classes = (IsAuthenticated,)
 
+    # 방법 1) update랑 delete를 막기보다는 보여지는 list를 해당 유저가 생성한 글만 보여지도록 한다.
+    def get_queryset(self):
+        queryset = self.queryset
+        queryset = queryset.filter(user=self.request.user)
+        return queryset
 
     # 아래 perform_create 나 create는 쓰나 안쓰나 viewset에 원래 적용된 메소드로 똑같지만, 
     # 수정하려고 해당 함수를 명시해서 수정하려고 한다. 지금은 save() 인자에 ser=self.request.user 를 줬다.
@@ -173,3 +178,21 @@ class BlogViewSet(viewsets.ModelViewSet):
         self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+    
+    # 방법 2) 지금은 방법 1 때문에 이거 안 탄다.
+    def update(self,request, *args,**kwargs):
+
+        partial = kwargs.pop('partial',False)
+        instance = self.get_object()
+
+        if instance.user != request.user:
+            return Response(status=status.HTTP_403_FORBIDDEN)
+        serializer = self.get_serializer(instance, data=request.dat, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+
+        if getattr(instance,'_prefetched_objects_cache',None):
+
+            instance._prefetched_objects_cahce = {}
+        
+        return Response(serializer.data)

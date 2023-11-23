@@ -1,0 +1,318 @@
+/* cmd + shift + R 눌러서 캐시가 지워져서 다시 정적파일을 불러올 수 있다.*/
+
+/* 간단한 스타일링을 위한 CSS 예제 */
+body {
+    font-family: Arial, sans-serif;
+    font-size: 20px;
+}
+
+.container {
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+label {
+    display: block;
+    font-weight: bold;
+}
+
+h1 {
+    text-align: center;
+}
+
+.btnList {
+    text-align: center;
+}
+
+.header {
+    background-color: #007bff;
+    /* 배경색 */
+    color: #fff;
+    /* 글자색 */
+    padding: 20px 40px;
+    /* 내부 여백 */
+    display: flex;
+    justify-content: space-between;
+    /* 로그인 버튼과 로그아웃 버튼을 우측에 정렬 */
+}
+
+.header h1 {
+    margin: 0;
+    /* 헤더 제목 위 아래 여백 제거 */
+    font-size: 24px;
+    /* 글자 크기 */
+}
+
+.header .user-actions {
+    display: flex;
+    align-items: center;
+}
+
+.header .user-actions a {
+    color: #fff;
+    margin-left: 20px;
+    text-decoration: none;
+    /* 로그인 버튼과 로그아웃 버튼 사이 여백 */
+}
+
+.user-actions a:hover {
+    text-decoration: underline;
+    /* 호버 시 밑줄 표시 */
+}
+
+.footer {
+    background-color: #333;
+    /* 배경색 */
+    color: #fff;
+    /* 글자색 */
+    padding: 20px;
+    /* 내부 여백 */
+    text-align: center;
+    /* 텍스트 가운데 정렬 */
+}
+
+.footer a {
+    color: #fff;
+    /* 링크 글자색 */
+    text-decoration: none;
+    /* 밑줄 제거 */
+}
+
+.footer a:hover {
+    text-decoration: underline;
+    /* 호버 시 밑줄 표시 */
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin: 20px 0;
+}
+
+.pagination a {
+    color: #007bff;
+    padding: 8px 16px;
+    text-decoration: none;
+    transition: background-color 0.3s;
+}
+
+.pagination a:hover {
+    background-color: #007bff;
+    color: #fff;
+}
+
+.pagination .disabled {
+    color: #888;
+    pointer-events: none;
+}
+
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+    padding: 20px;
+}
+
+.blog-card {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: center;
+}
+
+.blog-card:hover {
+    border-color: #007bff;
+}
+
+.blog-card.active {
+    border-color: #0056b3;
+}
+
+.blog-image {
+    max-width: 100%;
+    height: auto;
+    margin-bottom: 10px;
+}
+
+.logo a {
+    color: #fff;
+    text-decoration: none;
+}
+
+.pagination-container {
+    text-align: center;
+    margin: 40px 0;
+}
+
+.pagination-button {
+    margin: 0 5px;
+    padding: 15px 20px;
+    cursor: pointer;
+}
+
+.pagination-button.active {
+    font-weight: bold;
+    color: #fff;
+    background-color: #007bff;
+}
+
+.pagination-button {
+    text-decoration: none;
+}
+
+.blog-form-container {
+    width: 80%;
+    margin: 0 auto;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.blog-form-container h1 {
+    text-align: center;
+}
+
+.form-field {
+    margin-bottom: 15px;
+}
+
+.form-field label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.form-field input[type="text"],
+.form-field textarea,
+.form-field select {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.form-check {
+    margin-bottom: 15px;
+}
+
+.form-check input[type="checkbox"] {
+    margin-right: 5px;
+}
+
+button[type="submit"] {
+    background-color: #0056b3;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+button[type="submit"]:hover {
+    background-color: #004494;
+}
+
+.blog-form-container label.category-checkbox {
+    display: inline-block;
+    margin-right: 10px;
+}
+
+.blog-form-container label.category-checkbox input[type="checkbox"] {
+    margin-right: 5px;
+}
+
+.blog-detail-container {
+    max-width: 800px;
+    /* 컨테이너의 최대 너비 */
+    margin: 0 auto;
+    /* 중앙 정렬 */
+    padding: 20px;
+    /* 패딩 */
+    background-color: #f8f8f8;
+    /* 배경색 */
+    border-radius: 8px;
+    /* 모서리 둥글게 */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    /* 그림자 효과 */
+}
+
+.blog-detail-container h1 {
+    font-size: 28px;
+    /* 제목의 폰트 크기 */
+    color: #333;
+    /* 제목의 색상 */
+    margin-bottom: 15px;
+    /* 제목 아래의 여백 */
+}
+
+.blog-detail-container img {
+    max-width: 100%;
+    /* 이미지의 최대 너비 */
+    height: auto;
+    /* 이미지 높이는 자동 조절 */
+    border-radius: 4px;
+    /* 이미지 모서리 둥글게 */
+    margin-bottom: 15px;
+    /* 이미지 아래의 여백 */
+}
+
+.blog-detail-container #blogContent {
+    font-size: 16px;
+    /* 내용의 폰트 크기 */
+    color: #555;
+    /* 내용의 색상 */
+    line-height: 1.6;
+    /* 줄 간격 */
+    margin-bottom: 15px;
+    /* 내용 아래의 여백 */
+}
+
+.blog-detail-container #blogCategories {
+    font-size: 14px;
+    /* 카테고리의 폰트 크기 */
+    color: #666;
+    /* 카테고리의 색상 */
+    margin-bottom: 20px;
+    /* 카테고리 아래의 여백 */
+}
+
+#blogImage {
+    display: block;
+    /* 이미지를 블록 레벨 요소로 만듭니다 */
+    max-width: 100%;
+    /* 이미지의 최대 너비를 100%로 설정 */
+    height: auto;
+    /* 이미지의 높이를 자동으로 조절 */
+    margin: 0 auto;
+    /* 위아래 마진은 0, 좌우 마진은 자동으로 설정하여 가운데 정렬 */
+    border-radius: 4px;
+    /* 이미지 모서리 둥글게 */
+}
+
+.blog-actions {
+    margin-top: 20px;
+    text-align: center;
+    /* 버튼을 중앙 정렬합니다 */
+}
+
+.blog-actions button {
+    padding: 10px 15px;
+    margin: 0 10px;
+    border: none;
+    border-radius: 4px;
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.blog-actions button:hover {
+    background-color: #0056b3;
+}
+
+#deleteButton {
+    background-color: #dc3545;
+    /* 삭제 버튼은 빨간색으로 표시 */
+}
+
+#deleteButton:hover {
+    background-color: #c82333;
+}

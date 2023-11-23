@@ -31,7 +31,22 @@ class BlogDetailView(View):
 
     def get(self,request,blogid):
 
-        blog = Blog.objects.get(id=blogid)
-        return render(request,"blog_list.html",{"blogs":[blog]})
+        try:
+            blog = Blog.objects.get(id=blogid)
+        except Blog.DoesNotExist:
+            return HttpResponse("<h1>Blog not found</h1>")
+
+        return render(request,"blog/detail.html", {"owner":blog.user})
+
+        # blog = Blog.objects.get(id=blogid)
+        # return render(request,"blog_list.html",{"blogs":[blog]})
 
 
+class BlogCreateView(View):
+    def get(self,request):
+        return render(request,"blog/create.html")
+
+
+class BlogUpdateView(View):
+    def get(self,request,pk):
+        return render(request,"blog/update.html")
