@@ -27,4 +27,6 @@ urlpatterns = [
     path('blog/', include("blog.urls")),
 
     path('api/blog/', include('blog.api_urls')),
+
+    path('auth/', include("rest_framework.urls")), # login page
 ]
