@@ -143,6 +143,10 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.SessionAuthentication'
-    ]
+    ],
+    # 모든 api에 일일히 다 pagination_class를 추가하기보다는 프로젝트 settings에 pagination 클래스를 추가해준다.
+    # 'DEFAULT_PAGINATION_CLASS':'rest_framework.pagination.PageNumberPagination',
+    'DEFAULT_PAGINATION_CLASS':'api.pagination.CustomPageNumberPagination',
+    'PAGE_SIZE' : 10
 }
 
