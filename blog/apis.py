@@ -4,6 +4,8 @@ from rest_framework import status, generics, viewsets
 from .models import Blog
 from .serializers import BlogSerializer
 from rest_framework import exceptions
+from rest_framework.authentication import SessionAuthentication
+from rest_framework.permissions import IsAuthenticated
 
 
 
@@ -88,3 +90,15 @@ class BlogGenericDetailAPI(generics.RetrieveUpdateDestroyAPIView):
 class BlogViewSet(viewsets.ModelViewSet):
     queryset = Blog.objects.all()
     serializer_class = BlogSerializer
+    permission_classes = (IsAuthenticated,)
+
+    def perform_create(self, serializer):
+        print(self.request.user)
+        serializer.save(user=self.request.user)
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
