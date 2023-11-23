@@ -38,6 +38,8 @@ urlpatterns = [
     # http://127.0.0.1:8000/api/blog/
     path("api/blog/", include("blog.api_urls")),
 
+    path("auth/",include("rest_framework.urls")),   # login page
+
     # http://127.0.0.1:8000/admin/
     path('admin/', admin.site.urls),
 ]

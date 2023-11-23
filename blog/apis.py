@@ -5,6 +5,17 @@ from .models import Blog
 from .serializers import BlogSerializer
 from rest_framework import exceptions
 
+
+# 원래 API 마다 authentication_classes 과 permission_classes를 설정해줘야 하지만,
+# 이미 settings에 authentication_classes를 디폴트로 넣어놨다.
+# 특정 API 는 다른 인증방식을 사용하고 싶으면 해당 API에서 특정 인증방식으로 덮으면 된다.
+
+from rest_framework.authentication import SessionAuthentication 
+from rest_framework.permissions import IsAuthenticated
+
+
+
+
 class HelloWorldAPI(APIView):
 
     def get(self,request):
@@ -135,7 +146,30 @@ class BlogGenericDetailAPI(generics.RetrieveUpdateDestroyAPIView):
     queryset = Blog.objects.all()
     serializer_class = BlogSerializer
 
+
 # ListCreateAPIView 와 RetrieveUpdateDestroyAPIView 를 다 합치는 ViewSets
 class BlogViewSet(viewsets.ModelViewSet):
     queryset = Blog.objects.all()
     serializer_class = BlogSerializer
+    # # 인증
+    # authentication_classes = ()
+    # 인가
+    permission_classes = (IsAuthenticated,)
+
+
+    # 아래 perform_create 나 create는 쓰나 안쓰나 viewset에 원래 적용된 메소드로 똑같지만, 
+    # 수정하려고 해당 함수를 명시해서 수정하려고 한다. 지금은 save() 인자에 ser=self.request.user 를 줬다.
+    def perform_create(self,serializer):
+        print(self.request.user)
+        serializer.save(user=self.request.user)
+
+    # 결론적으로 create 함수는 바꾼게 없지만, 공부목적상 적어두자. perform_create를 통해 user가 쏙 들어가게 됐다.
+    def create(self, request, *args, **kwargs):
+        # user = request.user
+        # 둘 다 똑같다.
+        # user = self.request.user
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)

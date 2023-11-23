@@ -150,3 +150,6 @@ REST_FRAMEWORK = {
     'PAGE_SIZE' : 10
 }
 
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/auth/login'
+
