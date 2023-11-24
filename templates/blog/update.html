@@ -44,10 +44,10 @@ $(document).ready(function(){
 
 
 function blogUpdate() {
-
+    
     var title = document.getElementById('title').value;
     var content = document.getElementById('content').value;
-
+    let pk = window.location.href.split('/').filter(Boolean).pop()
     axiosInstance.patch(`/api/blog/viewset/${pk}/`, {
         title: title,
         content: content,
@@ -55,7 +55,9 @@ function blogUpdate() {
     .then(response => {
         console.log(response);
         alert("성공적으로 게시글이 수정되었습니다.")
-        window.location.href = "/";
+        history.back();
+        // 이전 페이지로 이동
+
     }).catch(error => {
         console.error('Error creating post:', error);
         // 오류 처리 로직

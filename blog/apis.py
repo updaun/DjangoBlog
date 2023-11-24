@@ -44,8 +44,21 @@ class BlogAPI(APIView):
 
 
 class BlogGenericAPI(generics.ListCreateAPIView):
-    queryset = Blog.objects.all()
+    queryset = Blog.objects.all().order_by("-created_at")
     serializer_class = BlogSerializer
+    permission_classes = (IsAuthenticated,)
+
+    def get_queryset(self):
+        queryset = self.queryset
+        queryset = queryset.filter(user=self.request.user)
+
+        # http://127.0.0.1:8000/blog/generic/?title=테스트
+        # querystring으로 title로 검색(검색을 간단하게 구현)
+        title = self.request.query_params.get("title")
+        if title:
+            queryset = queryset.filter(title__icontains=title)
+
+        return queryset
 
 
 class BlogDetailAPI(APIView):
@@ -92,11 +105,6 @@ class BlogViewSet(viewsets.ModelViewSet):
     serializer_class = BlogSerializer
     permission_classes = (IsAuthenticated,)
 
-    def get_queryset(self):
-        queryset = self.queryset
-        queryset = queryset.filter(user=self.request.user)
-        return queryset
-
     def perform_create(self, serializer):
         # print(self.request.user)
         serializer.save(user=self.request.user)
@@ -109,7 +117,7 @@ class BlogViewSet(viewsets.ModelViewSet):
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
     
     def list(self, request, *args, **kwargs):
-        queryset = self.filter_queryset(self.queryset)
+        queryset = self.filter_queryset(self.get_queryset())
 
         page = self.paginate_queryset(queryset)
         if page is not None:
@@ -134,3 +142,10 @@ class BlogViewSet(viewsets.ModelViewSet):
             instance._prefetched_objects_cache = {}
 
         return Response(serializer.data)
+    
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        self.perform_destroy(instance)
+        if instance.user != request.user:
+            return Response(status=status.HTTP_403_FORBIDDEN)
+        return Response(status=status.HTTP_204_NO_CONTENT)
