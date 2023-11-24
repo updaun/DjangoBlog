@@ -216,7 +216,7 @@ class BlogViewSet(viewsets.ModelViewSet):
 
         if instance.user != request.user:
             return Response(status=status.HTTP_403_FORBIDDEN)
-        serializer = self.get_serializer(instance, data=request.dat, partial=partial)
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
         serializer.is_valid(raise_exception=True)
         self.perform_update(serializer)
 
