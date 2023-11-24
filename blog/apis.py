@@ -43,8 +43,20 @@ class BlogAPI(APIView):
         return Response(status=status.HTTP_201_CREATED, data={"blog": serializer.data})
         
 class BlogGenericAPI(generics.ListCreateAPIView):
-    queryset = Blog.objects.all()
+    queryset = Blog.objects.all().order_by("-created_at")
     serializer_class = BlogSerializer
+    permission_classes = (IsAuthenticated,)
+
+    def get_queryset(self):
+        queryset = self.queryset
+        queryset = queryset.filter(user=self.request.user)
+
+        # querystring 으로 title 검색
+        title = self.request.query_params.get('title')
+        if title:
+            queryset = queryset.filter(title__icontains=title)
+
+        return queryset
 
 
 class BlogDetailAPI(APIView):
@@ -93,10 +105,10 @@ class BlogViewSet(viewsets.ModelViewSet):
     # authentication_classes = (SessionAuthentication)
     permission_classes = (IsAuthenticated,)
 
-    def get_queryset(self):
-        queryset = self.queryset
-        queryset = queryset.filter(user=self.request.user)
-        return queryset
+    # def get_queryset(self):
+    #     queryset = self.queryset
+    #     queryset = queryset.filter(user=self.request.user)
+    #     return queryset
 
     def perform_create(self, serializer):
         print(self.request.user)
@@ -134,5 +146,12 @@ class BlogViewSet(viewsets.ModelViewSet):
             # forcibly invalidate the prefetch cache on the instance.
             instance._prefetched_objects_cache = {}
 
-        return Response(serializer.data)    
+        return Response(serializer.data)   
+    
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        self.perform_destroy(instance)
+        if instance.user != request.user:
+            return Response(status=status.HTTP_403_FORBIDDEN)
+        return Response(status=status.HTTP_204_NO_CONTENT) 
     # def update(self, request, *args, **kwargs):

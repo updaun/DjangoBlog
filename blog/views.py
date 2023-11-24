@@ -3,7 +3,10 @@ from django.http import HttpResponse
 from django.shortcuts import render
 from django.views.generic import ListView
 from django.views import View
+from rest_framework.permissions import IsAuthenticated
 from .models import Blog
+from django.contrib.auth.mixins import LoginRequiredMixin
+
 
 def blog_list(request, *args, **kwargs):
     context = {}
@@ -21,6 +24,7 @@ class BlogListView(View):
         context['blogs'] = Blog.objects.all()
         return render(request, 'blog/blog_list.html', context)
     
+
 class BlogDetailView(View):
     def get(self, request, pk):
         try:
@@ -36,6 +40,19 @@ class BlogCreateView(View):
     
 
 class BlogUpdateView(View):
-    def get(self, request, *args, **kwargs):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, pk, *args, **kwargs):
+        try:
+            blog = Blog.objects.get(pk=pk)
+            if blog.user != request.user:
+                return HttpResponse("<h1>Permission Denied</h1>")          
+        except Blog.DoesNotExist:
+            return HttpResponse("<h1>Blog not found</h1>")      
         return render(request, 'blog/update.html')
         
+
+class MyBlogView(LoginRequiredMixin, View):
+
+    def get(self, request):
+        return render(request, "blog/myblog.html")

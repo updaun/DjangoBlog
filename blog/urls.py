@@ -9,4 +9,5 @@ urlpatterns = [
 
     path("create/", views.BlogCreateView.as_view()),
     path("update/<int:pk>/", views.BlogUpdateView.as_view()),
+    path("my/", views.MyBlogView.as_view()),
 ]
