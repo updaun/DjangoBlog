@@ -69,8 +69,24 @@ class BlogAPI(APIView):
 # ListAPIView 와 CreateAPIView 둘 다 포함하는 ListCreateAPIView
 class BlogGenericAPI(generics.ListCreateAPIView):
     
-    queryset = Blog.objects.all()
+    queryset = Blog.objects.all().order_by("-created_at")   # 최신 순으로 정렬
     serializer_class = BlogSerializer
+    permission_classes = (IsAuthenticated,)
+
+    def get_queryset(self):
+        queryset = self.queryset
+        queryset = queryset.filter(user=self.request.user)  # 본인 것만 filter
+        
+        
+        # http://127.0.0.1:8000/blog/generic/?title=테스트
+        # querystring으로 title로 검색(검색을 간단하게 구현)
+        title = self.request.query_params.get("title")
+        if title:
+            queryset = queryset.filter(title__icontains=title)
+
+        return queryset
+
+
 
 
 
@@ -156,11 +172,11 @@ class BlogViewSet(viewsets.ModelViewSet):
     # 인가
     permission_classes = (IsAuthenticated,)
 
-    # 방법 1) update랑 delete를 막기보다는 보여지는 list를 해당 유저가 생성한 글만 보여지도록 한다.
-    def get_queryset(self):
-        queryset = self.queryset
-        queryset = queryset.filter(user=self.request.user)
-        return queryset
+    # # 방법 1) update랑 delete를 막기보다는 보여지는 list를 해당 유저가 생성한 글만 보여지도록 한다.
+    # def get_queryset(self):
+    #     queryset = self.queryset
+    #     queryset = queryset.filter(user=self.request.user)
+    #     return queryset
 
     # 아래 perform_create 나 create는 쓰나 안쓰나 viewset에 원래 적용된 메소드로 똑같지만, 
     # 수정하려고 해당 함수를 명시해서 수정하려고 한다. 지금은 save() 인자에 ser=self.request.user 를 줬다.
@@ -179,6 +195,19 @@ class BlogViewSet(viewsets.ModelViewSet):
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
     
+    # 안 써도 default이지만 일단 눈에 익게 써놓자.(https://www.cdrf.co/3.14/rest_framework.viewsets/ModelViewSet.html)
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
+
+    
     # 방법 2) 지금은 방법 1 때문에 이거 안 탄다.
     def update(self,request, *args,**kwargs):
 
@@ -196,3 +225,10 @@ class BlogViewSet(viewsets.ModelViewSet):
             instance._prefetched_objects_cahce = {}
         
         return Response(serializer.data)
+    
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        self.perform_destroy(instance)
+        if instance.user != request.user:
+            return Response(status=status.HTTP_403_FORBIDDEN)
+        return Response(status=status.HTTP_204_NO_CONTENT)
