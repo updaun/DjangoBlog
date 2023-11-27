@@ -76,7 +76,7 @@ STATIC_URL = '/static/'
 # static 루트 설정
 
 # 배포단계에서는 STATIC_ROOT를 통해서 모든 static파일들을 몰아준다.
-# STATIC_ROOT = os.path.join(BASE_DIR,"staticfiles")
+STATIC_ROOT = os.path.join(BASE_DIR,"staticfiles")
 # # python manage.py collectstatic
 
 STATICFILES_DIRS = [
