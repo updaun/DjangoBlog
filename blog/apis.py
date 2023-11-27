@@ -5,7 +5,7 @@ from .models import Blog
 from .serializers import BlogSerializer
 from rest_framework import exceptions
 from rest_framework.authentication import SessionAuthentication
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 
 
 
@@ -103,7 +103,7 @@ class BlogGenericDetailAPI(generics.RetrieveUpdateDestroyAPIView):
 class BlogViewSet(viewsets.ModelViewSet):
     queryset = Blog.objects.all().order_by('-created_at')
     serializer_class = BlogSerializer
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticatedOrReadOnly,)
 
     def perform_create(self, serializer):
         # print(self.request.user)
