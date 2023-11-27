@@ -1,5 +1,4 @@
-version: '3.8'
-
+version: "3.8"
 services:
   nginx:
     image: nginx:1.19.5
@@ -21,21 +20,21 @@ services:
     networks:
       - network
     volumes:
-      - static_volume:/home/DjangoBlog/staticfiles
+      - static-volume:/home/DjangoBlog/staticfiles
     secrets:
       - DJANGO_SECRET_KEY
       - POSTGRES_DB
       - POSTGRES_USER
       - POSTGRES_PASSWORD
 
-  postgesdb:
-    image: postgrest:13.11
+  postgresdb:
+    image: postgres:13.11
     networks:
       - network
-    ports:
+    posts:
       - 5432:5432
     volumes:
-      - postges-database:/var/lib/postgresql/data
+      - postgres-database:/var/lib/postgresql/data
     secrets:
       - POSTGRES_DB
       - POSTGRES_USER
@@ -49,12 +48,12 @@ networks:
   network:
 
 volumes:
-  postgres_database:
-  static_volume:
+  postgres-database:
+  static-volume:
 
 secrets:
   DJANGO_SECRET_KEY:
-    external: true
+   external: true
   POSTGRES_DB:
     external: true
   POSTGRES_USER:
