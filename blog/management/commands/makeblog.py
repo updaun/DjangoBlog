@@ -7,7 +7,7 @@ class Command(BaseCommand):
     # def add_arguments(self, parser: CommandParser) -> None:
         # return super().add_arguments(parser)
     
-    def handle(self, *args,**options) -> str | None:
+    def handle(self, *args,**options):
         
         print("Make Blog Command")
 
