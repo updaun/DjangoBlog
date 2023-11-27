@@ -1,0 +1,62 @@
+version: "3.8"
+services:
+  nginx:
+    image: nginx:1.19.5
+    ports:
+      - mode: host
+        protocol: tcp
+        target: 80
+        published: 80
+    networks:
+      - network
+    volumes:
+      - /home/DjangoBlog/nginx/nginx.conf:/etc/nginx/nginx.conf
+      - static-volume:/data/static
+    depends_on:
+      - django_container
+
+  django_container:
+    image: djangoblog_django:v1.0.0
+    networks:
+      - network
+    volumes:
+      - static-volume:/home/DjangoBlog/staticfiles
+    secrets:
+      - DJANGO_SECRET_KEY
+      - POSTGRES_DB
+      - POSTGRES_USER
+      - POSTGRES_PASSWORD
+
+  postgresdb:
+    image: postgres:13.11
+    networks:
+      - network
+    ports:
+      - 5432:5432
+    volumes:
+      - postgres-database:/var/lib/postgresql/data
+    secrets:
+      - POSTGRES_DB
+      - POSTGRES_USER
+      - POSTGRES_PASSWORD
+    environment:
+      - POSTGRES_DB_FILE=/run/secrets/POSTGRES_DB
+      - POSTGRES_USER_FILE=/run/secrets/POSTGRES_USER
+      - POSTGRES_PASSWORD_FILE=/run/secrets/POSTGRES_PASSWORD
+
+networks:
+  network:
+
+volumes:
+  postgres-database:
+  static-volume:
+
+secrets:
+  DJANGO_SECRET_KEY:
+   external: true
+  POSTGRES_DB:
+    external: true
+  POSTGRES_USER:
+    external: true
+  POSTGRES_PASSWORD:
+    external: true
