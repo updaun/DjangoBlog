@@ -10,8 +10,8 @@ services:
     networks:
       - network
     volumes:
-      - /home/djangoblog/nginx/nginx.conf:/etc/nginx/nginx.conf
-      - static_volume:/data/static
+      - /home/DjangoBlog/nginx/nginx.conf:/etc/nginx/nginx.conf
+      - static-volume:/data/static
     depends_on:
       - django_container
 
@@ -26,12 +26,13 @@ services:
       - POSTGRES_DB
       - POSTGRES_USER
       - POSTGRES_PASSWORD
-
+    environment:
+      - DJANGO_SECRET_KEY_FILE=/run/secrets/DJANGO_SECRET_KEY
   postgresdb:
     image: postgres:13.11
     networks:
       - network
-    posts:
+    ports:
       - 5432:5432
     volumes:
       - postgres-database:/var/lib/postgresql/data
@@ -53,7 +54,7 @@ volumes:
 
 secrets:
   DJANGO_SECRET_KEY:
-   external: true
+    external: true
   POSTGRES_DB:
     external: true
   POSTGRES_USER:
