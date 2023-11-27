@@ -11,7 +11,7 @@ from rest_framework import exceptions
 # 특정 API 는 다른 인증방식을 사용하고 싶으면 해당 API에서 특정 인증방식으로 덮으면 된다.
 
 from rest_framework.authentication import SessionAuthentication 
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated,IsAuthenticatedOrReadOnly
 
 
 
@@ -170,7 +170,7 @@ class BlogViewSet(viewsets.ModelViewSet):
     # # 인증
     # authentication_classes = ()
     # 인가
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticatedOrReadOnly,)
 
     # # 방법 1) update랑 delete를 막기보다는 보여지는 list를 해당 유저가 생성한 글만 보여지도록 한다.
     # def get_queryset(self):
